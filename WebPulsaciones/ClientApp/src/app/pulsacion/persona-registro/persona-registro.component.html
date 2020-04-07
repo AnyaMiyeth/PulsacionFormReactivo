@@ -1,0 +1,61 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h2>Registro de Personas</h2>
+            {{getError('identificacion')}}
+
+            <form [formGroup]="formGroup">
+
+                <div class="form-group">
+                    <label>Identificacion</label>
+                    <input type="text" formControlName="identificacion" class="form-control"
+                        [ngClass]="{ 'is-invalid':  control.identificacion.errors }" />
+                    <div *ngIf=" control.identificacion.errors" class="invalid-feedback">
+                        <div *ngIf="control.identificacion.errors.required">El nombre es requerido</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" name="nombre" formControlName="nombre" placeholder="digite su nombre"
+                        class="form-control" [ngClass]="{'is-invalid':control.nombre.errors}" />
+
+                   <div *ngIf="control.nombre.errors" class="invalid-feedback">
+                   <div *ngIf="control.nombre.errors.required">Nombre es requerido</div>
+                </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="sexo">Sexo</label>
+                    <input type="text" name="sexo" formControlName="sexo" class="form-control"
+                        [ngClass]="{ 'is-invalid':  control.sexo.errors && formGroup.get('sexo').touched}" />
+                    <div *ngIf="control.sexo.errors && formGroup.get('sexo').touched" class="invalid-feedback">
+                        <div *ngIf="control.sexo.errors.required">El sexo es requerido</div>
+                        <div *ngIf="control.sexo.errors.validSexo">{{control.sexo.errors.messageSexo}}</div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label>Edad</label>
+                    <input type="number" formControlName="edad" class="form-control"
+                        [ngClass]="{ 'is-invalid':  control.edad.errors}" />
+                    <div *ngIf="control.edad.errors" class="invalid-feedback">
+                        <div *ngIf="control.edad.errors.required">La Edad es requerido</div>
+                        <div *ngIf="control.edad.errors.min">Los valores deben ser superior a 1 </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Pulsación</label>
+                    <input type="number" name="pulsacion" class="form-control" readonly />
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary mr-1" (click)=" onSubmit()"
+                        [disabled]="formGroup.invalid">Registrar</button>
+                    <button class="btn btn-secondary" type="reset">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
