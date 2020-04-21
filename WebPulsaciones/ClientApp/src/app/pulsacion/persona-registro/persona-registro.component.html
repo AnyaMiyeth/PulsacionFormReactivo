@@ -2,16 +2,16 @@
     <div class="row">
         <div class="col-md-6 offset-md-3">
             <h2>Registro de Personas</h2>
-            {{getError('identificacion')}}
+
 
             <form [formGroup]="formGroup">
 
                 <div class="form-group">
-                    <label>Identificacion</label>
+                    <label>Identificación</label>
                     <input type="text" formControlName="identificacion" class="form-control"
                         [ngClass]="{ 'is-invalid':  control.identificacion.errors }" />
                     <div *ngIf=" control.identificacion.errors" class="invalid-feedback">
-                        <div *ngIf="control.identificacion.errors.required">El nombre es requerido</div>
+                        <div *ngIf="control.identificacion.errors.required">El Identificación es requerido</div>
                     </div>
                 </div>
 

@@ -58,19 +58,6 @@ export class PersonaRegistroComponent implements OnInit {
 
   }
 
-  public getError(controlName: string): string {
-    let error = '';
-    const control = this.formGroup.get(controlName);
-    if (control.touched && control.errors != null) {
-      error = JSON.stringify(control.errors);
-    }
-    return error;
-  }
-
-  public getErrorV(controlName: string): ValidationErrors {
-    return this.formGroup.get(controlName).errors;
-  }
-  get f() { return this.formGroup.controls; }
   get control() { return this.formGroup.controls; }
 
 }

@@ -13,6 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { PersonaRegistroComponent } from './pulsacion/persona-registro/persona-registro.component';
 import { PersonaConsultaComponent } from './pulsacion/persona-consulta/persona-consulta.component';
 import { PersonaEdicionComponent } from './pulsacion/persona-edicion/persona-edicion.component';
+import { FiltroPersonaPipe } from './pipe/filtro-persona.pipe';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { PersonaEdicionComponent } from './pulsacion/persona-edicion/persona-edi
     FetchDataComponent,
     PersonaRegistroComponent,
     PersonaConsultaComponent,
-    PersonaEdicionComponent
+    PersonaEdicionComponent,
+    FiltroPersonaPipe
   ],
   imports: [
     ReactiveFormsModule,

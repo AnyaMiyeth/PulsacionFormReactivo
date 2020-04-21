@@ -90,6 +90,7 @@ namespace Datos
             persona.Nombre = (string)dataReader["Nombre"];
             persona.Sexo = (string)dataReader["Sexo"];
             persona.Edad = (int)dataReader["Edad"];
+            persona.Pulsacion=(decimal)dataReader["Pulsacion"];
             return persona;
         }
         public int Totalizar()
