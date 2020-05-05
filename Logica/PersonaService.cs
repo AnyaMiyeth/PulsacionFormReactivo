@@ -18,6 +18,11 @@ namespace Logica
         {
             try
             {
+                var personaBuscada = BuscarxIdentificacion(persona.Identificacion);
+                if (personaBuscada != null)
+                {
+                    return new GuardarPersonaResponse("Error la persona ya se encuentra registrada");
+                }
                 persona.CalcularPulsaciones();
                 _conexion.Open();
                 _repositorio.Guardar(persona);
@@ -67,7 +72,7 @@ namespace Logica
             try
             {
                 _conexion.Open();
-                var personaVieja = _repositorio.BuscarPorIdentificacion(personaNueva.Identificacion);
+                var personaVieja = BuscarxIdentificacion(personaNueva.Identificacion);
                 if (personaVieja != null)
                 {
                     _repositorio.Modificar(personaNueva);
