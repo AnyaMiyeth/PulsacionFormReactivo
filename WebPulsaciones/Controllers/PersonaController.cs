@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using WebPulsaciones.Models;
+using Datos;
 
 namespace WebPulsaciones.Controllers
 {
@@ -17,12 +18,11 @@ namespace WebPulsaciones.Controllers
     public class PersonaController : ControllerBase
     {
         private readonly PersonaService _personaService;
-        public IConfiguration Configuration { get; }
-        public PersonaController(IConfiguration configuration)
+      
+        public PersonaController(PulsacionesContext context)
         {
-            Configuration = configuration;
-            string connectionString = Configuration["ConnectionStrings:DefaultConnection"];
-            _personaService = new PersonaService(connectionString);
+        
+            _personaService = new PersonaService(context);
         }
         // GET: api/Persona
         [HttpGet]
@@ -80,11 +80,12 @@ namespace WebPulsaciones.Controllers
         // PUT: api/Persona/5
         [HttpPut("{identificacion}")]
         public ActionResult<string> Put(string identificacion, Persona persona)
-        {
+        {  
+            /*
             var id=_personaService.BuscarxIdentificacion(persona.Identificacion);
             if(id==null){
                 return BadRequest("No encontrado");
-            }
+            }*/
             var mensaje=_personaService.Modificar(persona);
            return Ok(mensaje) ;
 
