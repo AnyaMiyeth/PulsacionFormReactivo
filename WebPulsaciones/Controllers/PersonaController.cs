@@ -10,9 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using WebPulsaciones.Models;
 using Datos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebPulsaciones.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PersonaController : ControllerBase

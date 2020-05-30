@@ -22,17 +22,20 @@ namespace Datos.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Rutas",
+                name: "Usuarios",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Descripcion = table.Column<string>(nullable: true),
-                    Valor = table.Column<decimal>(nullable: false)
+                    UserName = table.Column<string>(nullable: false),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
+                    Password = table.Column<string>(nullable: true),
+                    MobilePhone = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    Estado = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Rutas", x => x.Id);
+                    table.PrimaryKey("PK_Usuarios", x => x.UserName);
                 });
         }
 
@@ -42,7 +45,7 @@ namespace Datos.Migrations
                 name: "Personas");
 
             migrationBuilder.DropTable(
-                name: "Rutas");
+                name: "Usuarios");
         }
     }
 }

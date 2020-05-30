@@ -3,14 +3,16 @@ using Datos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Datos.Migrations
 {
     [DbContext(typeof(PulsacionesContext))]
-    partial class PulsacionesContextModelSnapshot : ModelSnapshot
+    [Migration("20200526062406_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,7 +67,7 @@ namespace Datos.Migrations
 
                     b.HasKey("UserName");
 
-                    b.ToTable("Users");
+                    b.ToTable("Usuarios");
                 });
 #pragma warning restore 612, 618
         }

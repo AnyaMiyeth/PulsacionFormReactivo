@@ -9,7 +9,7 @@ namespace Datos
         {
         }
         public DbSet<Persona> Personas { get; set; }
-        public DbSet<Ruta> Rutas { get; set; }
+        public DbSet<User> Users { get; set; }
 
     }
 }

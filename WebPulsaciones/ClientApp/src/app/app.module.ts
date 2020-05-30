@@ -16,7 +16,8 @@ import { PersonaConsultaComponent } from './pulsacion/persona-consulta/persona-c
 import { PersonaEdicionComponent } from './pulsacion/persona-edicion/persona-edicion.component';
 import { FiltroPersonaPipe } from './pipe/filtro-persona.pipe';
 import { AlertModalComponent } from './@base/modal/alert-modal/alert-modal.component';
-
+import { LoginComponent } from './login/login.component';
+import {JwtInterceptor} from './services/jwt.interceptor';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { AlertModalComponent } from './@base/modal/alert-modal/alert-modal.compo
     PersonaConsultaComponent,
     PersonaEdicionComponent,
     FiltroPersonaPipe,
-    AlertModalComponent
+    AlertModalComponent,
+    LoginComponent
   ],
   imports: [
     ReactiveFormsModule,
@@ -46,7 +48,7 @@ import { AlertModalComponent } from './@base/modal/alert-modal/alert-modal.compo
     AppRoutingModule
   ],
   entryComponents:[AlertModalComponent],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
