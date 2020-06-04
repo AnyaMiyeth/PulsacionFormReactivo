@@ -19,7 +19,7 @@ export class HandleHttpErrorService {
         this.mostrarError400(error);
       }
        else if (error.status == "401") {
-        this.mostrarError400(error);
+        this.mostrarError500(error);
       }
         
       return of(result as T);

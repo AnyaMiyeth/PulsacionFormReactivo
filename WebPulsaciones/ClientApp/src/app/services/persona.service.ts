@@ -14,6 +14,11 @@ const httpOptionsPut = {
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
+/*
+const httpOptionsAutorization = {
+  headers: new HttpHeaders({ 'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9tb2JpbGVwaG9uZSI6IjMxODAwMDAwMDAwIiwicm9sZSI6WyJSb2wxIiwiUm9sMiJdLCJuYmYiOjE1OTEyNTIyNjksImV4cCI6MTU5MTg1NzA2OSwiaWF0IjoxNTkxMjUyMjY5fQ.pCjRuSoVOt7ItnZJu8ZOM4YRiIzaOMgb7sa_GjG3yyA` })
+};
+*/
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +35,7 @@ export class PersonaService {
   }
 
   get(): Observable<Persona[]> {
-    return this.http.get<Persona[]>(this.baseUrl + 'api/Persona',)
+    return this.http.get<Persona[]>(this.baseUrl + 'api/Persona')
         .pipe(
             tap(_ => this.handleErrorService.log('datos enviados')),
             catchError(this.handleErrorService.handleError<Persona[]>('Consulta Persona', null))

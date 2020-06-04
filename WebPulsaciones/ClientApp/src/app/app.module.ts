@@ -48,7 +48,10 @@ import {JwtInterceptor} from './services/jwt.interceptor';
     AppRoutingModule
   ],
   entryComponents:[AlertModalComponent],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },],
+  providers:
+    [
+      { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
