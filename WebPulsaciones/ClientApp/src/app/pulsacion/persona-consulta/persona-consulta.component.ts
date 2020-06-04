@@ -12,6 +12,7 @@ export class PersonaConsultaComponent implements OnInit {
   personas:Persona[];
   constructor(private personaService: PersonaService) { }
 
+
   ngOnInit() {
 
     this.personaService.get().subscribe(result => {
