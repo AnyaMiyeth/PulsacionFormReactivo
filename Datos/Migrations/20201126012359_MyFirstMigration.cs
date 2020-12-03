@@ -2,7 +2,7 @@
 
 namespace Datos.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class MyFirstMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -22,7 +22,7 @@ namespace Datos.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Usuarios",
+                name: "Users",
                 columns: table => new
                 {
                     UserName = table.Column<string>(nullable: false),
@@ -35,7 +35,7 @@ namespace Datos.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Usuarios", x => x.UserName);
+                    table.PrimaryKey("PK_Users", x => x.UserName);
                 });
         }
 
@@ -45,7 +45,7 @@ namespace Datos.Migrations
                 name: "Personas");
 
             migrationBuilder.DropTable(
-                name: "Usuarios");
+                name: "Users");
         }
     }
 }
