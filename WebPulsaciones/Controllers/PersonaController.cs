@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using WebPulsaciones.Models;
 using Datos;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
+using WebPulsaciones.Hubs;
 
 namespace WebPulsaciones.Controllers
 {
@@ -20,10 +22,10 @@ namespace WebPulsaciones.Controllers
     public class PersonaController : ControllerBase
     {
         private readonly PersonaService _personaService;
-      
-        public PersonaController(PulsacionesContext context)
+        private readonly IHubContext<SignalHub> _hubContext;
+         public PersonaController(PulsacionesContext context, IHubContext<SignalHub> hubContext)
         {
-        
+            _hubContext = hubContext;
             _personaService = new PersonaService(context);
         }
         // GET: api/Persona
@@ -45,7 +47,7 @@ namespace WebPulsaciones.Controllers
         }
         // POST: api/Persona
         [HttpPost]
-        public ActionResult<PersonaViewModel> Post(PersonaInputModel personaInput)
+        public async Task<ActionResult<PersonaViewModel>> Post(PersonaInputModel personaInput)
         {
             Persona persona = MapearPersona(personaInput);
             var response = _personaService.Guardar(persona);
@@ -59,6 +61,7 @@ namespace WebPulsaciones.Controllers
                 return BadRequest(problemDetails);
                 
             }
+            await _hubContext.Clients.All.SendAsync("SignalMessageReceived",personaInput);
             return Ok(response.Persona);
         }
         // DELETE: api/Persona/5

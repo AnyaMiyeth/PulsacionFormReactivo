@@ -26,6 +26,7 @@ namespace Logica
                 persona.CalcularPulsaciones();
                 _context.Personas.Add(persona);
                 _context.SaveChanges();
+               
                 return new GuardarPersonaResponse(persona);
             }
             catch (Exception e)

@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using WebPulsaciones.Config;
 using System.Text;
+using WebPulsaciones.Hubs;
 
 namespace WebPulsaciones
 {
@@ -29,7 +30,7 @@ namespace WebPulsaciones
             // Configurar cadena de Conexion con EF
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<PulsacionesContext>(opt => opt.UseSqlServer(connectionString));
-
+            services.AddSignalR();
             services.AddControllersWithViews();
 
             #region    configure strongly typed settings objects
@@ -123,6 +124,7 @@ namespace WebPulsaciones
             #endregion
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<SignalHub>("/signalHub");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
