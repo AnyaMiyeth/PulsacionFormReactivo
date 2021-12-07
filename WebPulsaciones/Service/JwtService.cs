@@ -43,9 +43,11 @@ namespace WebPulsaciones.Service
                     new Claim(ClaimTypes.Email, user.Email.ToString()),
                     new Claim(ClaimTypes.MobilePhone, user.MobilePhone.ToString()),
                     new Claim(ClaimTypes.Role, "Rol1"),
-                    new Claim(ClaimTypes.Role, "Rol2"),
+                    new Claim(ClaimTypes.Role, "Rol3"),
+                   
+                 
                 }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

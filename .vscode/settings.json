@@ -1,4 +1,4 @@
 {
     "appService.deploySubpath": "WebPulsaciones\\publish",
-    "appService.defaultWebAppToDeploy": "/subscriptions/a45d64f8-02a3-4f07-95c2-3e491256c31e/resourceGroups/appsvc_windows_centralus/providers/Microsoft.Web/sites/WebAmbUpc2021"
+    "appService.defaultWebAppToDeploy": "/subscriptions/a45d64f8-02a3-4f07-95c2-3e491256c31e/resourceGroups/appsvc_windows_centralus/providers/Microsoft.Web/sites/Pulsacion20212"
 }

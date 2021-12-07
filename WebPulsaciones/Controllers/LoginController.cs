@@ -24,16 +24,17 @@ namespace WebPulsaciones.Controllers
         private UserService _userService;
 
         PulsacionesContext _context;
-        public LoginController(PulsacionesContext context, IOptions<AppSetting> appSettings)
+        public LoginController(PulsacionesContext context, IOptions<AppSetting> appSettings, JwtService jwtService)
         {
             _context = context;
             var admin = _context.Users.Find("admin");
             if (admin == null)
             {
-                _context.Users.Add(new Entity.User() { UserName = "admin", Password = "admin", Email = "admin@gmail.com", Estado = "AC", FirstName = "Adminitrador", LastName = "", MobilePhone = "31800000000" });
+                _context.Users.Add(new Entity.User() { UserName = "admin", Password = "admin", Email = "admin@gmail.com", Estado = "AC", FirstName = "Adminitrador", LastName = "", MobilePhone = "3000000000" });
                 var i = _context.SaveChanges();
             }
-            _jwtService = new JwtService(appSettings);
+            //_jwtService = new JwtService(appSettings);
+            _jwtService = jwtService;
             _userService = new UserService(context);
         }
 

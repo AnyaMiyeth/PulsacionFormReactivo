@@ -43,7 +43,7 @@ export class PersonaService {
   }
 
   post(persona: Persona): Observable<Persona> {
-        return this.http.post<Persona>(this.baseUrl + 'api/Persona/' , persona)
+        return this.http.post<Persona>(this.baseUrl + 'api/Persona/' , persona,httpOptions )
         .pipe(
             tap(_ => this.handleErrorService.log('datos enviados')),
             catchError(this.handleErrorService.handleError<Persona>('Registrar Persona', null))

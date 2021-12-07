@@ -14,6 +14,8 @@ using System;
 using WebPulsaciones.Config;
 using System.Text;
 using WebPulsaciones.Hubs;
+using WebPulsaciones.Service;
+using System.Security.Claims;
 
 namespace WebPulsaciones
 {
@@ -32,10 +34,25 @@ namespace WebPulsaciones
             services.AddDbContext<PulsacionesContext>(opt => opt.UseSqlServer(connectionString));
             services.AddSignalR();
             services.AddControllersWithViews();
-
+            services.AddScoped<JwtService>();
             #region    configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSetting");
             services.Configure<AppSetting>(appSettingsSection);
+            #endregion
+
+            #region
+            //services.AddAuthorization(options =>
+            //    options.AddPolicy("TieneTelefono", policy => policy.RequireClaim(ClaimTypes.MobilePhone)));
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("TieneTelefonoTigo",
+                    policy => policy.RequireAssertion(context => 
+                    context.User.HasClaim(c => (c.Type == ClaimTypes.MobilePhone && c.Value.StartsWith("318"))
+                    )
+                ));
+            });
+                
             #endregion
 
             #region Configure jwt authentication
@@ -80,6 +97,29 @@ namespace WebPulsaciones
                     {
                         Name = "Licencia dotnet foundation",
                         Url = new Uri("https://www.byasystems.co/license"),
+                    }
+                });
+                c.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme."
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                          new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "bearerAuth"
+                                }
+                            },
+                            new string[] {}
                     }
                 });
             });

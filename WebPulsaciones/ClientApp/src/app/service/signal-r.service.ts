@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { EventEmitter, Inject, Injectable } from '@angular/core';
 import { Persona } from '../pulsacion/models/persona';
 import * as signalR from "@aspnet/signalr";
 
@@ -9,15 +9,17 @@ export class SignalRService {
 
   private hubConnection: signalR.HubConnection;
   signalReceived = new EventEmitter<Persona>();
+    baseUrl: string;
 
-  constructor() {
+  constructor(@Inject('BASE_URL') baseUrl: string) {
     this.buildConnection();
     this.startConnection();
+    this.baseUrl = baseUrl;
    }
 
    private buildConnection = () => {
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl("http://localhost:5001/signalHub") //use your api adress here and make sure you use right hub name.
+      .withUrl(this.baseUrl +"signalHub") //use your api adress here and make sure you use right hub name.
       .build();
   };
   private startConnection = () => {

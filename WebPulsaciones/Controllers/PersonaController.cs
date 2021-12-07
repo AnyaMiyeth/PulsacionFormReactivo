@@ -16,9 +16,10 @@ using WebPulsaciones.Hubs;
 
 namespace WebPulsaciones.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Rol1")]
     [Route("api/[controller]")]
     [ApiController]
+    // [Authorize(Policy = "TieneTelefonoTigo")]
     public class PersonaController : ControllerBase
     {
         private readonly PersonaService _personaService;
