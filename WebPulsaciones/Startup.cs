@@ -1,12 +1,21 @@
+using Datos;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
+using WebPulsaciones.Config;
+using System.Text;
+using WebPulsaciones.Hubs;
+using WebPulsaciones.Service;
+using System.Security.Claims;
 
 namespace WebPulsaciones
 {
@@ -20,7 +29,55 @@ namespace WebPulsaciones
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Configurar cadena de Conexion con EF
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<PulsacionesContext>(opt => opt.UseSqlServer(connectionString));
+            services.AddSignalR();
             services.AddControllersWithViews();
+            services.AddScoped<JwtService>();
+            #region    configure strongly typed settings objects
+            var appSettingsSection = Configuration.GetSection("AppSetting");
+            services.Configure<AppSetting>(appSettingsSection);
+            #endregion
+
+            #region
+            //services.AddAuthorization(options =>
+            //    options.AddPolicy("TieneTelefono", policy => policy.RequireClaim(ClaimTypes.MobilePhone)));
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("TieneTelefonoTigo",
+                    policy => policy.RequireAssertion(context => 
+                    context.User.HasClaim(c => (c.Type == ClaimTypes.MobilePhone && c.Value.StartsWith("318"))
+                    )
+                ));
+            });
+                
+            #endregion
+
+            #region Configure jwt authentication
+            var appSettings = appSettingsSection.Get<AppSetting>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+            #endregion
+
+           
             //Agregar OpenApi Swagger
             services.AddSwaggerGen(c =>
             {
@@ -34,12 +91,35 @@ namespace WebPulsaciones
                     {
                         Name = "Unicesar",
                         Email = string.Empty,
-                        Url = new Uri("https://github.com/borisgr04/CrudNgDotNetCore3"),
+                        Url = new Uri("https://github.com/anyamiyeth"),
                     },
                     License = new OpenApiLicense
                     {
                         Name = "Licencia dotnet foundation",
                         Url = new Uri("https://www.byasystems.co/license"),
+                    }
+                });
+                c.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme."
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                          new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "bearerAuth"
+                                }
+                            },
+                            new string[] {}
                     }
                 });
             });
@@ -73,9 +153,18 @@ namespace WebPulsaciones
             }
 
             app.UseRouting();
+            #region global cors policy activate Authentication/Authorization
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+            #endregion
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<SignalHub>("/signalHub");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");

@@ -4,6 +4,8 @@ import { PersonaRegistroComponent } from './pulsacion/persona-registro/persona-r
 import { PersonaConsultaComponent } from './pulsacion/persona-consulta/persona-consulta.component';
 import { Routes, RouterModule } from '@angular/router';
 import { PersonaEdicionComponent } from './pulsacion/persona-edicion/persona-edicion.component';
+import { AuthGuard } from './services/auth.guard';
+import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
   {
@@ -13,13 +15,15 @@ const routes: Routes = [
 
   {
     path: 'personaRegistro',
-    component: PersonaRegistroComponent
+    component: PersonaRegistroComponent, canActivate: [AuthGuard]
   },
 
   {
     path: 'personaEdicion/:identificacion',
     component: PersonaEdicionComponent
-  }
+  },
+  { path: 'login', component: LoginComponent },
+
 ];
 
 

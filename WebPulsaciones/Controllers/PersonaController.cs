@@ -9,20 +9,25 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using WebPulsaciones.Models;
+using Datos;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
+using WebPulsaciones.Hubs;
 
 namespace WebPulsaciones.Controllers
 {
+    [Authorize(Roles = "Rol1")]
     [Route("api/[controller]")]
     [ApiController]
+    // [Authorize(Policy = "TieneTelefonoTigo")]
     public class PersonaController : ControllerBase
     {
         private readonly PersonaService _personaService;
-        public IConfiguration Configuration { get; }
-        public PersonaController(IConfiguration configuration)
+        private readonly IHubContext<SignalHub> _hubContext;
+         public PersonaController(PulsacionesContext context, IHubContext<SignalHub> hubContext)
         {
-            Configuration = configuration;
-            string connectionString = Configuration["ConnectionStrings:DefaultConnection"];
-            _personaService = new PersonaService(connectionString);
+            _hubContext = hubContext;
+            _personaService = new PersonaService(context);
         }
         // GET: api/Persona
         [HttpGet]
@@ -43,14 +48,21 @@ namespace WebPulsaciones.Controllers
         }
         // POST: api/Persona
         [HttpPost]
-        public ActionResult<PersonaViewModel> Post(PersonaInputModel personaInput)
+        public async Task<ActionResult<PersonaViewModel>> Post(PersonaInputModel personaInput)
         {
             Persona persona = MapearPersona(personaInput);
             var response = _personaService.Guardar(persona);
             if (response.Error) 
             {
-                return BadRequest(response.Mensaje);
+                ModelState.AddModelError("Guardar Persona", response.Mensaje);
+                var problemDetails = new ValidationProblemDetails(ModelState)
+                {
+                    Status = StatusCodes.Status400BadRequest,
+                };
+                return BadRequest(problemDetails);
+                
             }
+            await _hubContext.Clients.All.SendAsync("SignalMessageReceived",personaInput);
             return Ok(response.Persona);
         }
         // DELETE: api/Persona/5
@@ -74,11 +86,12 @@ namespace WebPulsaciones.Controllers
         // PUT: api/Persona/5
         [HttpPut("{identificacion}")]
         public ActionResult<string> Put(string identificacion, Persona persona)
-        {
+        {  
+            /*
             var id=_personaService.BuscarxIdentificacion(persona.Identificacion);
             if(id==null){
                 return BadRequest("No encontrado");
-            }
+            }*/
             var mensaje=_personaService.Modificar(persona);
            return Ok(mensaje) ;
 

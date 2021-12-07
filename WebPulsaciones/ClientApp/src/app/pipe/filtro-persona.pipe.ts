@@ -11,5 +11,5 @@ export class FiltroPersonaPipe implements PipeTransform {
     return persona.filter(p => p.nombre.toLowerCase().indexOf(searchText.toLowerCase()) !== -1||
     p.identificacion.indexOf(searchText) !== -1);
   }
-
+///
 }
