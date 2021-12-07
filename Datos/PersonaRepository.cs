@@ -68,7 +68,7 @@ namespace Datos
                 return DataReaderMapToPerson(dataReader);
             }
         }
-
+        //  Adicionado
         public void Modificar( Persona persona)
         {
             using (var command = _connection.CreateCommand())

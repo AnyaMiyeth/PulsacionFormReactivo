@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Persona } from '../models/persona';
 import { PersonaService } from '../../services/persona.service';
 import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { AlertModalComponent } from 'src/app/@base/modal/alert-modal/alert-modal.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-persona-registro',
@@ -11,7 +13,10 @@ import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors }
 export class PersonaRegistroComponent implements OnInit {
   formGroup: FormGroup;
   persona: Persona;
-  constructor(private personaService: PersonaService, private formBuilder: FormBuilder) { }
+  constructor(
+    private personaService: PersonaService,
+     private formBuilder: FormBuilder,
+     private modalService: NgbModal) { }
 
   ngOnInit() {
     this.buildForm();
@@ -28,7 +33,7 @@ export class PersonaRegistroComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       identificacion: [this.persona.identificacion, Validators.required],
       nombre: [this.persona.nombre, Validators.required],
-      sexo: [this.persona.sexo, [Validators.required, this.ValidaSexo]],
+      sexo: [this.persona.sexo],
       edad: [this.persona.edad, [Validators.required, Validators.min(1)]]
     });
   }
@@ -51,7 +56,9 @@ export class PersonaRegistroComponent implements OnInit {
     this.persona = this.formGroup.value;
     this.personaService.post(this.persona).subscribe(p => {
       if (p != null) {
-        alert('Persona creada!');
+        const messageBox = this.modalService.open(AlertModalComponent);
+        messageBox.componentInstance.title = "Resultado Operación";
+        messageBox.componentInstance.message = 'Persona creada!';
         this.persona = p;
       }
     });
